@@ -41,6 +41,13 @@ def _get_args():
     parser.add_argument("--smtp-password", default="")
 
     parser.add_argument(
+        "--pdisk-status",
+        action="append",
+        default=["Ok"],
+        help="Acceptable pdisk healthy status.",
+    )
+
+    parser.add_argument(
         "-c",
         "--command",
         action="append",
@@ -101,6 +108,13 @@ def _main():
 
     if args.data_type == "pdisk":
         import omsaalert.pdisk_parser
+
+        omsaalert.pdisk_parser.NONGLOBALHOTSPARE_HEALTHY_VALUES[
+            "Status"
+        ] = args.pdisk_status
+        omsaalert.pdisk_parser.GLOBALHOTSPARE_HEALTHY_VALUES[
+            "Status"
+        ] = args.pdisk_status
 
         p = omsaalert.pdisk_parser.PdiskParser()
     elif args.data_type == "vdisk":
